@@ -1,0 +1,14 @@
+{
+    "name": "lsrong/auth",
+    "description": "An authorization library  in laravel",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "lsrong",
+            "email": "lsrong0414@gmail.com.cn"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {}
+}
