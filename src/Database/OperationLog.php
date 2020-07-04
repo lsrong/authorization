@@ -3,7 +3,6 @@
 
 namespace Lson\Authorization\Database;
 
-
 use Encore\Admin\Auth\Database\Administrator;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 

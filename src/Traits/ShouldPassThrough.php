@@ -28,11 +28,11 @@ trait ShouldPassThrough
         $prefix = $prefix ? '/' . $prefix . '/' : '/';
 
         return Collection::make($excepts)
-            ->map(static function($path) use($prefix){
+            ->map(static function ($path) use ($prefix) {
                 return $prefix . trim($path, '/');
             })
-            ->contains(static function ($path) use($request){
-                return $request->is($path);
+            ->contains(static function ($path) use ($request) {
+                return $request->is($path !== '/' ? trim($path, '/') : $path);
             });
     }
 }

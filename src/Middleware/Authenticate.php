@@ -25,13 +25,18 @@ class Authenticate
      */
     public function handle($request, Closure $next)
     {
+        // Not need to check authenticate
+        if (!config('authorization.check_authenticate')) {
+            return $next($request);
+        }
+
         // Authenticated
-        if(Helper::guard()->check()){
+        if (Helper::guard()->check()) {
             return $next($request);
         }
 
         // Should pass through
-        if($this->isThrough($request)) {
+        if ($this->isThrough($request)) {
             return $next($request);
         }
 
@@ -50,5 +55,4 @@ class Authenticate
     {
         throw new UnauthenticatedException('Unauthenticated.');
     }
-
 }

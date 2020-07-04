@@ -1,6 +1,56 @@
 <?php
 return [
     /*
+   |--------------------------------------------------------------------------
+   | Basic setting
+   |--------------------------------------------------------------------------
+   |
+   */
+    // Route prefix
+    'prefix' => '',
+
+    // Route middleware groups
+    'route_middleware' => 'authorization',
+
+    // Authenticate switch
+    'check_authenticate' => true,
+
+    // Permission switch
+    'check_permission' => true,
+
+   /*
+   |--------------------------------------------------------------------------
+   | Authentication setting
+   |--------------------------------------------------------------------------
+   |
+   | Include an authentication
+   | guard , a user provider setting of authentication driver, except routes.
+   |
+   */
+   'auth' => [
+       'guard' => 'system',
+
+       'guards' => [
+           'system' => [
+               'driver' => 'jwt',
+               'provider' => 'authorization',
+           ],
+       ],
+
+       'providers' => [
+           'authorization' => [
+               'driver' => 'eloquent',
+               'model' => Lson\Authorization\Database\User::class
+           ],
+       ],
+
+       'excepts' => [
+           'api/login',
+           'api/logout'
+       ],
+   ],
+
+    /*
     |--------------------------------------------------------------------------
     | Database setting
     |--------------------------------------------------------------------------
@@ -34,38 +84,26 @@ return [
         'role_permissions_table' => 'auth_role_permissions',
         'role_menu_table'        => 'auth_role_menu',
     ],
-   /*
+
+    /*
    |--------------------------------------------------------------------------
-   | Authentication setting
+   | Operation log setting
    |--------------------------------------------------------------------------
    |
-   | Include an authentication
-   | guard , a user provider setting of authentication driver, except routes.
+   | Setting this option to open or close operation log
    |
    */
-   'auth' => [
-       'guard' => 'system',
+    'operation_log' => [
+        //
+        'enable' => false,
 
-       'guards' => [
-           'system' => [
-               'driver' => 'jwt',
-               'provider' => 'authorization',
-           ],
-       ],
+        // logging allowed methods
+        'allowed_methods' => ['GET', 'HEAD', 'POST', 'PUT', 'DELETE', 'CONNECT', 'OPTIONS', 'TRACE', 'PATCH'],
 
-       'providers' => [
-           'authorization' => [
-               'driver' => 'eloquent',
-               'model' => Lson\Authorization\Database\User::class
-           ],
-       ],
-
-       'excepts' => [
-           'api/login',
-           'api/logout'
-       ],
-   ],
-
-    'prefix' => ''
+        // Routes that will not log to database.
+        'except' => [
+            'test/*'
+        ],
+    ],
 
 ];

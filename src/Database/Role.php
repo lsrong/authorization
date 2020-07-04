@@ -3,7 +3,6 @@
 
 namespace Lson\Authorization\Database;
 
-
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Role extends Base
@@ -101,6 +100,4 @@ class Role extends Base
             $model->menus()->detach();
         });
     }
-
-
 }

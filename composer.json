@@ -1,8 +1,8 @@
 {
     "name": "lson/auth",
-    "description": "An authorization library in laravel",
+    "description": "Auth-rbac library for laravel ",
     "type": "library",
-    "keywords": ["laravel", "authorization"],
+    "keywords": ["laravel", "authorization", "rbac", "auth"],
     "license": "MIT",
     "authors": [
         {

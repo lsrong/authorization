@@ -8,14 +8,22 @@ use Illuminate\Support\ServiceProvider;
 
 class AuthorizationServiceProvider extends ServiceProvider
 {
-
     /**
      * @var array Register commands
      */
     protected $commands = [
-        Console\MenuCommand::class,
         Console\PublishCommand::class,
-        Console\ResetPasswordCommand::class
+    ];
+
+    /**
+     * Route middleware.
+     *
+     * @var array
+     */
+    protected $routeMiddleware = [
+        'authorization.auth'    => Middleware\Authenticate::class,
+        'authorization.log'        => Middleware\OperationLog::class,
+        'authorization.permission' => Middleware\Permission::class,
     ];
 
 
@@ -30,12 +38,8 @@ class AuthorizationServiceProvider extends ServiceProvider
         // Publishing
         $this->publishing();
 
-        // Commands
-        $this->commands($this->commands);
-
         // Merge default configuration
-        $this->mergeConfigFrom( __DIR__ . '/../config/authorization.php', 'authorization');
-
+        $this->mergeConfigFrom(__DIR__ . '/../config/authorization.php', 'authorization');
     }
     /**
      * Publish config migration files
@@ -64,7 +68,7 @@ class AuthorizationServiceProvider extends ServiceProvider
     {
         $path = $this->app->databasePath('migrations' . DIRECTORY_SEPARATOR);
 
-        return Collection::make(File::glob( $path . '*_create_authorization_tables.php'))
+        return Collection::make(File::glob($path . '*_create_authorization_tables.php'))
             ->push($path . date('Y_m_d_His') . '_create_authorization_tables.php')
             ->first();
     }
@@ -78,18 +82,41 @@ class AuthorizationServiceProvider extends ServiceProvider
      */
     public function register():void
     {
-        // Load auth configurations
-        $this->loadAuthConfig();
+        // Load authorization configurations
+        $this->loadAuthorizationConfiguration();
 
+        // Load commands
+        $this->commands($this->commands);
 
-
+        // Load route middleware
+        $this->loadRouteMiddleware();
     }
 
-    protected function loadAuthConfig():void
+    /**
+     * Load authorization configuration
+     *
+     * @author lsrong
+     * @datetime 04/07/2020 16:54
+     */
+    protected function loadAuthorizationConfiguration():void
     {
         $this->app['config']->set(Arr::dot(config('authorization.auth'), 'auth.'));
     }
 
+    /**
+     * Register route middleware
+     *
+     * @author lsrong
+     * @datetime 04/07/2020 17:08
+     */
+    protected function loadRouteMiddleware():void
+    {
+        // Register route middleware.
+        foreach ($this->routeMiddleware as $name => $middleware) {
+            $this->app['router']->aliasMiddleware($name, $middleware);
+        }
 
-
+        // Register route middleware groups
+        $this->app['router']->middlewareGroup(config('authorization.route_middleware'), array_keys($this->routeMiddleware));
+    }
 }

@@ -20,6 +20,7 @@ class CreateAuthorizationTables extends Migration
             $table->string('name')->default('')->comment('昵称');
             $table->string('avatar')->nullable()->default('')->comment('头像');
             $table->string('remember_token', 128)->nullable()->default('')->comment('token认证');
+            $table->boolean('is_super')->nullable()->default(0)->comment('Is super administrator');
             $table->timestamps();
         });
 

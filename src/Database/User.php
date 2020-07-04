@@ -2,13 +2,14 @@
 namespace Lson\Authorization\Database;
 
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Lson\Authorization\Traits\HasPermission;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticateContract;
 use Illuminate\Auth\Authenticatable;
 
-class User extends Base implements JWTSubject,AuthenticateContract
+class User extends Base implements JWTSubject, AuthenticateContract
 {
-    use Authenticatable;
+    use Authenticatable,HasPermission;
 
     /**
      * The attributes that should be file for arrays.
@@ -16,7 +17,7 @@ class User extends Base implements JWTSubject,AuthenticateContract
      * @var array
      */
     protected $fillable = [
-        'username', 'password', 'name', 'avatar', 'remember_token',
+        'username', 'password', 'name', 'avatar', 'remember_token', 'is_super',
     ];
 
 
