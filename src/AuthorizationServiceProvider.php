@@ -53,7 +53,7 @@ class AuthorizationServiceProvider extends ServiceProvider
         $this->publishes([ __DIR__ . '/../config/authorization.php' => $this->app->configPath('authorization.php'),], 'config');
 
         // migration
-        $this->publishes([__DIR__.'/../database/migrations/create_permission_tables.php' => $this->migration(),], 'migrations');
+        $this->publishes([__DIR__.'/../database/migrations/create_authorization_tables.php' => $this->migration(),], 'migrations');
     }
 
     /**
@@ -100,7 +100,7 @@ class AuthorizationServiceProvider extends ServiceProvider
      */
     protected function loadAuthorizationConfiguration():void
     {
-        $this->app['config']->set(Arr::dot(config('authorization.auth'), 'auth.'));
+        $this->app['config']->set(Arr::dot(config('authorization.auth', []), 'auth.'));
     }
 
     /**

@@ -32,6 +32,7 @@ class CreateAuthorizationTables extends Migration
             $table->timestamps();
         });
 
+        // Permission table
         Schema::create(config('authorization.database.permissions_table'), static function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('name', 64)->unique()->comment('权限名称');
@@ -41,16 +42,18 @@ class CreateAuthorizationTables extends Migration
             $table->timestamps();
         });
 
+        // Menu table
         Schema::create(config('authorization.database.menu_table'), static function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->integer('parent_id')->default(0)->comment('父级id');
-            $table->integer('order')->default(0)->default('排序字段');
+            $table->integer('order')->default(0)->comment('排序字段');
             $table->string('title', 64)->comment('标题');
             $table->string('icon', 64)->comment('菜单图标');
             $table->string('uri')->nullable()->comment('路由路径');
             $table->timestamps();
         });
 
+        // Role and user relationship
         Schema::create(config('authorization.database.role_users_table'), static function (Blueprint $table) {
             $table->integer('role_id');
             $table->integer('user_id');
@@ -58,6 +61,7 @@ class CreateAuthorizationTables extends Migration
             $table->timestamps();
         });
 
+        // Role and permission relationship
         Schema::create(config('authorization.database.role_permissions_table'), static function (Blueprint $table) {
             $table->integer('role_id');
             $table->integer('permission_id');
@@ -65,6 +69,7 @@ class CreateAuthorizationTables extends Migration
             $table->timestamps();
         });
 
+        // User and permission relationship
         Schema::create(config('authorization.database.user_permissions_table'), static function (Blueprint $table) {
             $table->integer('user_id');
             $table->integer('permission_id');
@@ -72,6 +77,7 @@ class CreateAuthorizationTables extends Migration
             $table->timestamps();
         });
 
+        // Role and menu relationship
         Schema::create(config('authorization.database.role_menu_table'), static function (Blueprint $table) {
             $table->integer('role_id');
             $table->integer('menu_id');
@@ -79,6 +85,7 @@ class CreateAuthorizationTables extends Migration
             $table->timestamps();
         });
 
+        // Operation log table
         Schema::create(config('authorization.database.operation_log_table'), static function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->integer('user_id')->index('user_id')->comment('用户id');
